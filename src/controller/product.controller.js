@@ -3,20 +3,24 @@ const Product = require("../models/productModel")
 const { HTTPResponse, HTTPError } = require("../utils/response")
 
 const addProduct = async (req, res) => {
-    let response
-    const { productTitle, productDescription, quantity, price } = req.body
+    console.log(req.file)
+    let response;
+    const { productTitle, productDescription, quantity, price } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null; 
 
     const product = new Product({
         productTitle,
         productDescription,
         quantity,
         price,
-    })
-    await product.save()
+        image,
+    });
 
-    response = new HTTPResponse("Product added successfully", product)
-    return res.status(statusCode.CREATED).json(response)
-}
+    await product.save();
+
+    response = new HTTPResponse("Product added successfully", product);
+    return res.status(statusCode.CREATED).json(response);
+};
 
 const getAllProducts = async (req, res) => {
     let error, response
